@@ -1,0 +1,65 @@
+from collections import defaultdict
+
+def learn_bpe_vocab(text, max_vocab_size):
+    """Learn the BPE vocabulary from the text"""
+    # Count the frequency of each character
+    char_counts = defaultdict(int)
+    for word in text.split():
+        for char in word:
+            char_counts[char] += 1
+
+    # Combine pairs of characters based on frequency until reaching the desired vocabulary size
+    num_merges = 0
+    vocab = {}
+    while len(vocab) < max_vocab_size and num_merges < max_vocab_size:
+        # Find the most frequent character pair
+        best_pair = None
+        best_freq = -1
+        for pair in vocab.keys() | char_counts.keys():
+            freq = char_counts.get(pair, 0)
+            if freq > best_freq:
+                best_pair = pair
+                best_freq = freq
+
+        # Stop if no more pairs to merge
+        if best_freq == 1:
+            break
+
+        # Merge the most frequent character pair
+        vocab[best_pair] = len(vocab)
+        num_merges += 1
+
+        # Update character frequency counts
+        new_char_counts = defaultdict(int)
+        for word in text.split():
+            word = best_pair.join(word.split())
+            for char in word:
+                new_char_counts[char] += 1
+        char_counts = new_char_counts
+
+    return vocab
+
+def tokenize(text, vocab):
+    """Tokenize the text using the BPE vocabulary"""
+    # Replace each character pair in the text with its corresponding token
+    tokenized_text = []
+    for word in text.split():
+        new_word = ""
+        for i in range(len(word)):
+            j = i + 1
+            while j <= len(word):
+                pair = word[i:j]
+                if pair in vocab:
+                    new_word += str(vocab[pair]) + " "
+                    i = j - 1
+                    break
+                j += 1
+        tokenized_text.append(new_word[:-1])
+
+    return " ".join(tokenized_text)
+
+text = "Hello world, how are you doing today?"
+max_vocab_size = 100
+vocab = learn_bpe_vocab(text, max_vocab_size)
+tokenized_text = tokenize(text, vocab)
+print(tokenized_text)
