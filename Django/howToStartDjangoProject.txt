@@ -1,0 +1,107 @@
+First things first, let’s get a working directory set up:
+$ mkdir django-by-example
+
+Go inside the folder:
+$ cd django-by-example
+
+Initialize a new git repo within your working directory:
+$ git init
+
+Set up a virtual environment to use for our application:
+$ python3 -m venv venv
+
+Activate the virtual environment:
+$ source venv/bin/activate
+
+You should now see (venv) to the left of the prompt in the terminal, indicating that you are now working in a virtual environment.
+
+Next install what you need in the virtual environment:
+$ pip install django
+
+Add the installed libraries to our requirements.txt file:
+$ python3 -m pip freeze > requirements.txt
+********************************************************************************
+
+
+Next you start project:
+$ django-admin startproject nameOfProject
+
+
+Next move into the directory just created:
+$ cd nameOfProject
+
+
+To run and test the server:
+$ python3 manage.py runserver
+
+
+Next make an app:
+$ python3 manage.py migrate
+$ python3 manage.py startapp nameOfApp
+
+
+Next open settings.py in nameOfProject folder and add nameOfApp to INSTALLED_APPS
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'nameOfApp'
+]
+
+
+Next open urls.py in nameOfProject folder and add the following:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('nameOfApp.urls')),
+]
+
+
+Next create a file in nameOfApp called urls.py and input the following:
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name="home")
+]
+
+
+Next open the views.py file in the nameOfApp folder and input the following:
+from django.shortcuts import render
+
+# Create your views here.
+def home(request):
+    return render(request, 'home.html', {})
+
+
+Next create a templates folder in the nameOfApp folder
+
+Next create a new file in the templates folder called home.html and input the following:
+<h1>Hello World!</h1>
+
+
+To run and test the server:
+$ python3 manage.py runserver
+********************************************************************************
+To migrate and use a database get within the Blog folder that has the
+manage.py files and type the following:
+$ python3 manage.py migrate
+
+Now you can create an admin:
+$ python3 manage.py createsuperuser
+user: admin
+password: admin
+
+All database code is done in models.py located in the nameOfApp folder
+To push new database code type the following into the terminal:
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+********************************************************************************
+
