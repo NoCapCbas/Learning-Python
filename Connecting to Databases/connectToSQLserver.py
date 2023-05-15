@@ -6,7 +6,7 @@ import pyodbc
 def connectDB3():
     
     conn = pyodbc.connect(
-                            'Driver={SQL Server};'
+                            'Driver={SQL Server};'  # or 'Driver={ODBC Driver 17 for SQL Server};'
                             'Server=server_name;'
                             'Database=database_name;'
                             'UID=username;'
