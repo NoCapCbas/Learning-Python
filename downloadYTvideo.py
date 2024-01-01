@@ -1,3 +1,4 @@
+# if error occurs pip uninstall pytube, then pip install pytube back. This worked to fix some errors of possible library updates
 import pytube
 link = 'https://www.youtube.com/watch?v=0sMtoedWaf0'
 # poor quality video
